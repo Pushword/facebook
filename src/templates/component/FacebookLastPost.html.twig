@@ -4,7 +4,6 @@
 
     {% block gallery %}
         {% set gallery_id = 'g-' ~ post.post_id %}
-        {% from view('/component/media_gallery.html.twig') import gallery_part %}
         {% if post.images_hd is defined and post.images_hd is not empty %}
             {{ gallery(post.images_hd) }}
         {% endif %}
