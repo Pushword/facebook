@@ -15,8 +15,15 @@ class TwigExtension extends AbstractExtension
 {
     use RequiredApps;
 
+    private string $mediaDir;
+
     /** @required */
     public ImageManager $imageManager;
+
+    public function setMediaDir(string $mediaDir)
+    {
+        $this->mediaDir = $mediaDir;
+    }
 
     public function getFunctions()
     {
