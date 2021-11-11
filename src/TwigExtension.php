@@ -27,14 +27,14 @@ class TwigExtension extends AbstractExtension
 
     protected function getFacebookLastPost(string $id): ?array
     {
-        $fbScraper = new FacebookScraper($id);
-        $posts = $fbScraper->getPosts();
+        $facebookScraper = new FacebookScraper($id);
+        $posts = $facebookScraper->getPosts();
 
         // We retry getting the last result wich succeed to request facebook
         if (! isset($posts[0])) {
             $defaultCacheExpir = Client::$cacheExpir;
             Client::$cacheExpir = 0;
-            $posts = $fbScraper->getPosts();
+            $posts = $facebookScraper->getPosts();
             Client::$cacheExpir = $defaultCacheExpir;
         }
 
@@ -66,10 +66,10 @@ class TwigExtension extends AbstractExtension
     {
         $return = [];
 
-        $text = new UnicodeString($post['text']);
+        $unicodeString = new UnicodeString($post['text']);
 
         foreach ($post['images_hd'] as $i => $image) {
-            $name = $text->truncate(25, '...').($i ? ' '.$i : '');
+            $name = $unicodeString->truncate(25, '...').($i ? ' '.$i : '');
             $return[] = $this->imageManager->importExternal($image, $name, 'fb-'.$name);
         }
 
