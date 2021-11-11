@@ -21,7 +21,9 @@ class TwigExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('facebook_last_post', [$this, 'showFacebookLastPost'], ['needs_environment' => true, 'is_safe' => ['html']]),
+            new TwigFunction('facebook_last_post', function (Twig $twig, string $id, string $template) {
+                return $this->showFacebookLastPost($twig, $id, $template);
+            }, ['needs_environment' => true, 'is_safe' => ['html']]),
         ];
     }
 
@@ -49,7 +51,7 @@ class TwigExtension extends AbstractExtension
             return null;
         }
 
-        if (! $template) {
+        if ('' === $template || '0' === $template) {
             return $lastPost;
         }
 
