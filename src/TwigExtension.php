@@ -18,6 +18,9 @@ class TwigExtension extends AbstractExtension
     /** @required */
     public ImageManager $imageManager;
 
+    /**
+     * @return \Twig\TwigFunction[]
+     */
     public function getFunctions()
     {
         return [
@@ -43,6 +46,9 @@ class TwigExtension extends AbstractExtension
         return $posts[0] ?? null;
     }
 
+    /**
+     * @return mixed[]|string|null
+     */
     public function showFacebookLastPost(Twig $twig, string $id, string $template = '/component/FacebookLastPost.html.twig')
     {
         $lastPost = $this->getFacebookLastPost($id);
@@ -64,6 +70,9 @@ class TwigExtension extends AbstractExtension
         return $twig->render($view, ['pageId' => $id, 'post' => $lastPost]);
     }
 
+    /**
+     * @return \Pushword\Core\Entity\MediaInterface[]
+     */
     private function importImages($post): array
     {
         $return = [];
