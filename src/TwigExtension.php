@@ -30,6 +30,9 @@ class TwigExtension extends AbstractExtension
         ];
     }
 
+    /**
+     * @return array<mixed>|null
+     */
     protected function getFacebookLastPost(string $id): ?array
     {
         $facebookScraper = new FacebookScraper($id);
@@ -53,7 +56,7 @@ class TwigExtension extends AbstractExtension
     {
         $lastPost = $this->getFacebookLastPost($id);
 
-        if (! $lastPost) {
+        if (null === $lastPost) {
             return null;
         }
 
@@ -61,7 +64,7 @@ class TwigExtension extends AbstractExtension
             return $lastPost;
         }
 
-        if ($lastPost['images_hd']) {
+        if (isset($lastPost['images_hd'])) {
             $lastPost['images_hd'] = $this->importImages($lastPost);
         }
 
@@ -71,17 +74,19 @@ class TwigExtension extends AbstractExtension
     }
 
     /**
+     * @param mixed[] $post
+     *
      * @return \Pushword\Core\Entity\MediaInterface[]
      */
-    private function importImages($post): array
+    private function importImages(array $post): array
     {
         $return = [];
 
-        $unicodeString = new UnicodeString($post['text']);
+        $unicodeString = new UnicodeString($post['text']); // @phpstan-ignore-line TODO switch to Object...
 
-        foreach ($post['images_hd'] as $i => $image) {
-            $name = $unicodeString->truncate(25, '...').($i ? ' '.$i : '');
-            $return[] = $this->imageManager->importExternal($image, $name, 'fb-'.$name);
+        foreach ($post['images_hd'] as $i => $image) { // @phpstan-ignore-line TODO switch to Object...
+            $name = $unicodeString->truncate(25, '...').($i ? ' '.$i : '');  // @phpstan-ignore-line TODO switch to Object...
+            $return[] = $this->imageManager->importExternal($image, $name, 'fb-'.$name); // @phpstan-ignore-line TODO switch to Object...
         }
 
         return $return;
